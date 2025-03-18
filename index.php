@@ -4,13 +4,13 @@ require_once 'pdo.php';
 $etudiants = $dbPDO->query("SELECT id, prenom, nom FROM etudiants")->fetchAll(PDO::FETCH_ASSOC);
 $classes = $dbPDO->query("SELECT id, libelle FROM classes")->fetchAll(PDO::FETCH_ASSOC);
 $professeurs = $dbPDO->query("SELECT prenom, nom FROM professeurs")->fetchAll(PDO::FETCH_ASSOC);
+$users = $dbPDO->query("SELECT id, prenom, nom, email, role FROM users")->fetchAll(PDO::FETCH_ASSOC);
 
 $query = "SELECT professeurs.prenom, professeurs.nom, matiere.lib AS matiere, classes.libelle AS classe 
           FROM professeurs 
           JOIN matiere ON professeurs.id_matiere = matiere.id 
           JOIN classes ON professeurs.id_classe = classes.id";
 $professeurs_detail = $dbPDO->query($query)->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +18,7 @@ $professeurs_detail = $dbPDO->query($query)->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Étudiants, Classes et Professeurs</title>
+    <title>Gestion des Étudiants et Utilisateurs</title>
 </head>
 <body>
     <h1>Liste des Étudiants</h1>
@@ -51,22 +51,25 @@ $professeurs_detail = $dbPDO->query($query)->fetchAll(PDO::FETCH_ASSOC);
         } ?>
     </ul>
 
-    <h1>Ajouter une Matière</h1>
-    <form action="Views/nouvelle_matiere.php" method="POST">
-        <input type="text" name="libelle" required>
-        <button type="submit">Valider</button>
-    </form>
+    <h1>Liste des Utilisateurs</h1>
+    <ul>
+        <?php foreach ($users as $user) {
+            echo "<li>" . htmlspecialchars($user['prenom']) . " " . htmlspecialchars($user['nom']) . " (" . htmlspecialchars($user['email']) . ") - Rôle: " . htmlspecialchars($user['role']) . "</li>";
+        } ?>
+    </ul>
 
-    <h1>Ajouter un Étudiant</h1>
-    <form action="Views/nouvel_etudiant.php" method="POST">
+    <h1>Inscription d'un Utilisateur</h1>
+    <form action="Views/nouvel_utilisateur.php" method="POST">
         <input type="text" name="prenom" placeholder="Prénom" required>
         <input type="text" name="nom" placeholder="Nom" required>
-        <select name="classe_id" required>
-            <?php foreach ($classes as $classe) {
-                echo "<option value='" . $classe['id'] . "'>" . htmlspecialchars($classe['libelle']) . "</option>";
-            } ?>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Mot de passe" required>
+        <select name="role" required>
+            <option value="admin">Admin</option>
+            <option value="professeur">Professeur</option>
+            <option value="etudiant">Étudiant</option>
         </select>
-        <button type="submit">Valider</button>
+        <button type="submit">S'inscrire</button>
     </form>
 </body>
 </html>
