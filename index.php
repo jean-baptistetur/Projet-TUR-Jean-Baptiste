@@ -1,7 +1,7 @@
 <?php
 require_once 'pdo.php';
 
-$etudiants = $dbPDO->query("SELECT prenom, nom FROM etudiants")->fetchAll(PDO::FETCH_ASSOC);
+$etudiants = $dbPDO->query("SELECT id, prenom, nom FROM etudiants")->fetchAll(PDO::FETCH_ASSOC);
 $classes = $dbPDO->query("SELECT id, libelle FROM classes")->fetchAll(PDO::FETCH_ASSOC);
 $professeurs = $dbPDO->query("SELECT prenom, nom FROM professeurs")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -24,7 +24,8 @@ $professeurs_detail = $dbPDO->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <h1>Liste des Étudiants</h1>
     <ul>
         <?php foreach ($etudiants as $etudiant) {
-            echo "<li>" . htmlspecialchars($etudiant['prenom']) . " " . htmlspecialchars($etudiant['nom']) . "</li>";
+            echo "<li>" . htmlspecialchars($etudiant['prenom']) . " " . htmlspecialchars($etudiant['nom']) . " ";
+            echo "<a href='Views/modif_etudiant.php?id=" . $etudiant['id'] . "'>Modifier</a></li>";
         } ?>
     </ul>
 
