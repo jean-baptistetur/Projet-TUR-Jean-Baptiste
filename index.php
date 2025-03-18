@@ -1,17 +1,9 @@
 <?php
-
 require_once 'pdo.php';
 
-
-
 $etudiants = $dbPDO->query("SELECT prenom, nom FROM etudiants")->fetchAll(PDO::FETCH_ASSOC);
-
-
-$classes = $dbPDO->query("SELECT libelle FROM classes")->fetchAll(PDO::FETCH_ASSOC);
-
-
+$classes = $dbPDO->query("SELECT id, libelle FROM classes")->fetchAll(PDO::FETCH_ASSOC);
 $professeurs = $dbPDO->query("SELECT prenom, nom FROM professeurs")->fetchAll(PDO::FETCH_ASSOC);
-
 
 $query = "SELECT professeurs.prenom, professeurs.nom, matiere.lib AS matiere, classes.libelle AS classe 
           FROM professeurs 
@@ -31,30 +23,48 @@ $professeurs_detail = $dbPDO->query($query)->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <h1>Liste des Étudiants</h1>
     <ul>
-        <?php foreach ($etudiants as $etudiant): ?>
-            <li><?= htmlspecialchars($etudiant['prenom']) . " " . htmlspecialchars($etudiant['nom']) ?></li>
-        <?php endforeach; ?>
+        <?php foreach ($etudiants as $etudiant) {
+            echo "<li>" . htmlspecialchars($etudiant['prenom']) . " " . htmlspecialchars($etudiant['nom']) . "</li>";
+        } ?>
     </ul>
 
     <h1>Liste des Classes</h1>
     <ul>
-        <?php foreach ($classes as $classe): ?>
-            <li><?= htmlspecialchars($classe['libelle']) ?></li>
-        <?php endforeach; ?>
+        <?php foreach ($classes as $classe) {
+            echo "<li>" . htmlspecialchars($classe['libelle']) . "</li>";
+        } ?>
     </ul>
 
     <h1>Liste des Professeurs</h1>
     <ul>
-        <?php foreach ($professeurs as $prof): ?>
-            <li><?= htmlspecialchars($prof['prenom']) . " " . htmlspecialchars($prof['nom']) ?></li>
-        <?php endforeach; ?>
+        <?php foreach ($professeurs as $prof) {
+            echo "<li>" . htmlspecialchars($prof['prenom']) . " " . htmlspecialchars($prof['nom']) . "</li>";
+        } ?>
     </ul>
 
     <h1>Professeurs avec Matière et Classe</h1>
     <ul>
-        <?php foreach ($professeurs_detail as $prof): ?>
-            <li><?= htmlspecialchars($prof['prenom']) . " " . htmlspecialchars($prof['nom']) . " - " . htmlspecialchars($prof['matiere']) . " (" . htmlspecialchars($prof['classe']) . ")" ?></li>
-        <?php endforeach; ?>
+        <?php foreach ($professeurs_detail as $prof) {
+            echo "<li>" . htmlspecialchars($prof['prenom']) . " " . htmlspecialchars($prof['nom']) . " - " . htmlspecialchars($prof['matiere']) . " (" . htmlspecialchars($prof['classe']) . ")</li>";
+        } ?>
     </ul>
+
+    <h1>Ajouter une Matière</h1>
+    <form action="Views/nouvelle_matiere.php" method="POST">
+        <input type="text" name="libelle" required>
+        <button type="submit">Valider</button>
+    </form>
+
+    <h1>Ajouter un Étudiant</h1>
+    <form action="Views/nouvel_etudiant.php" method="POST">
+        <input type="text" name="prenom" placeholder="Prénom" required>
+        <input type="text" name="nom" placeholder="Nom" required>
+        <select name="classe_id" required>
+            <?php foreach ($classes as $classe) {
+                echo "<option value='" . $classe['id'] . "'>" . htmlspecialchars($classe['libelle']) . "</option>";
+            } ?>
+        </select>
+        <button type="submit">Valider</button>
+    </form>
 </body>
 </html>
