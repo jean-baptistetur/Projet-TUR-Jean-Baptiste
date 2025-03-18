@@ -1,5 +1,5 @@
 <?php
-require_once '../Model/pdo.php';
+require_once 'pdo.php';
 
 $etudiants = $dbPDO->query("SELECT id, prenom, nom FROM etudiants")->fetchAll(PDO::FETCH_ASSOC);
 $classes = $dbPDO->query("SELECT id, libelle FROM classes")->fetchAll(PDO::FETCH_ASSOC);
