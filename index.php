@@ -1,5 +1,5 @@
 <?php
-require_once 'pdo.php';
+require_once '../Model/pdo.php';
 
 $etudiants = $dbPDO->query("SELECT id, prenom, nom FROM etudiants")->fetchAll(PDO::FETCH_ASSOC);
 $classes = $dbPDO->query("SELECT id, libelle FROM classes")->fetchAll(PDO::FETCH_ASSOC);
@@ -25,7 +25,8 @@ $professeurs_detail = $dbPDO->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <ul>
         <?php foreach ($etudiants as $etudiant) {
             echo "<li>" . htmlspecialchars($etudiant['prenom']) . " " . htmlspecialchars($etudiant['nom']) . " ";
-            echo "<a href='Views/modif_etudiant.php?id=" . $etudiant['id'] . "'>Modifier</a></li>";
+            echo "<a href='Views/modif_etudiant.php?id=" . $etudiant['id'] . "'>Modifier</a>";
+            echo " | <a href='Views/suppression_etudiant.php?id=" . $etudiant['id'] . "'>Supprimer</a></li>";
         } ?>
     </ul>
 
